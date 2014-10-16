@@ -1,0 +1,12 @@
+extends layout
+
+block content
+	h1 Download your calendar
+	ul
+		li
+			a(href="//geit.uk/timetables/" + user.id + ".ics") Download directly (not automatically updated)
+		li 
+			a(href="//www.google.com/calendar/render?cid=webcal://geit.uk/timetables/" + user.id + ".ics") Add to Google Calendar
+		li 
+			a(href="webcal://geit.uk/timetables/" + user.id + ".ics") Subscribe to your calendar (iOS)	
+		

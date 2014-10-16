@@ -1,0 +1,9 @@
+extends layout
+
+block content
+	h1 Hi !{user.name.substr(0, user.name.indexOf(" "))}!
+	p.lead We're just getting your timetable ready - this can take up to 60 seconds. 
+	div.h1.text-center !{percentageComplete}%
+
+block header
+	meta(http-equiv="refresh" content="5")

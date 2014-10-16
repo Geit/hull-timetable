@@ -1,0 +1,19 @@
+extends layout
+
+block content
+	h1 Hull iCalendar
+	if error
+		div.alert.alert-danger Error: !{error}
+	div.row
+		div.col-xs-8.col-xs-offset-2
+			form(role="form" action="/timetables/auth" method="post").authentication-form
+				input.form-control.top-input(name="username", placeholder="University User ID", required, autofocus)
+				input.form-control.middle-input(name="password", type="password", placeholder="University Password", required)
+				button.btn.btn-lg.btn-primary.btn-block(type="submit") Sign In
+	h2 What is it?
+	p iCalendar is an standardised calendar format supported by virtually every calendar product on the planet. This means that it can be easily synced to your phone, or other mobile device, and you'll get inline notifications on the lockscreen about upcoming labs, lectures and seminars, instead of having to navigate through the iHull app.
+	h2 Is it safe?
+	p Yes - We do not store your password. When you submit your university user name and password we submit an authentication request on your behalf to the iHull platform. The iHull platform gives us a token lasting a year or more to perform actions on your behalf.
+	p If you still don't trust us:  you can change your university password after we've got an authentication token and your iCalendar timetable will continue to function and update.
+	h2 How does it work?
+	p Once we have your iHull token we fetch and store your timetable for the entire year. This helps to ensure we're not overworking the iHull platform and improves speed. We fetch timetabling updates for you periodically.
