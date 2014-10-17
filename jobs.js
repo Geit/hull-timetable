@@ -9,7 +9,7 @@ kue.Job.rangeByType ('sync', 'complete', 0, 1000, 'asc', function (err, selected
 		job.remove();
 	});
 });
-
+	
 
 fetchTimetableUpdates = function() {
 	var startDate =  moment().startOf('isoWeek');
@@ -23,7 +23,7 @@ fetchTimetableUpdates = function() {
 				startDate: moment().startOf('isoWeek'), 
 				endDate:  moment().startOf('isoWeek').add(4, 'weeks'), 
 				userId: results[i].id
-			}).removeOnComplete(false).save( function(err){
+			}).removeOnComplete(true).save( function(err){
 			   if(err) console.log(err);
 			});
 		}
