@@ -4,6 +4,12 @@ var kue = require('kue'),
 	kue.app.listen(27046);
 var mysqlConnection = require('./db.js');
 
+kue.Job.rangeByType ('sync', 'complete', 0, 1000, 'asc', function (err, selectedJobs) {
+	selectedJobs.forEach(function (job) {
+		job.remove();
+	});
+});
+
 
 fetchTimetableUpdates = function() {
 	var startDate =  moment().startOf('isoWeek');
@@ -11,12 +17,13 @@ fetchTimetableUpdates = function() {
 	
 	mysqlConnection.query('SELECT * FROM users WHERE last_fetch > 0 AND last_fetch < ? LIMIT 30', [(new moment()).subtract(8, 'hours').unix()], function(err, results) {
 		for(var i = 0; i < results.length; i++) {
+			console.log('Short sync for ' + results[i].name);
 			jobs.create('sync', {
-				title: 'Short sync for ' + results[0].name,
+				title: 'Short sync for ' + results[i].name,
 				startDate: moment().startOf('isoWeek'), 
 				endDate:  moment().startOf('isoWeek').add(4, 'weeks'), 
-				userId: results[0].id
-			}).save( function(err){
+				userId: results[i].id
+			}).removeOnComplete(false).save( function(err){
 			   if(err) console.log(err);
 			});
 		}
@@ -98,10 +105,3 @@ var processSyncJob = function(job, done) {
 }
 
 jobs.process('sync', processSyncJob);
-
-//Reset all queued jobs
-kue.Job.rangeByType ('job', 'active', 0, 100, 'asc', function (err, selectedJobs) {
-    selectedJobs.forEach(function (job) {
-        job.state('inactive').save();
-    });
-});
